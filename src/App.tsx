@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { 
   PlusIcon,
   MinusIcon,
@@ -13,6 +13,11 @@ import {
   CopyIcon,
   EyeOffIcon,
   TrashIcon,
+  InstagramIcon,
+  GitHubIcon,
+  FacebookIcon,
+  LinkedinIcon,
+  GmailIcon,
 } from "./assets/icons/icon";
 import { Button } from "./components/ui/button";
 import { BniLogo, BriLogo, BtnLogo, MandiriLogo, BcaLogo } from "./components/ui/BankLogo";
@@ -20,13 +25,29 @@ import { SearchBar } from "./components/ui/SearchBar";
 import { CartButton } from "./components/ui/CartButton";
 import { InputFeild } from "./components/ui/InputFeild";
 import { Quantity } from "./components/ui/Quantity";
+import { RadioButton } from "./components/ui/RadioButton";
+import { Checkbox } from "./components/ui/Checkbox";
+import { EmptyCartIllustration } from "./components/illustrations/EmptyIllustrations";
+import { EmptySearchIllustration } from "./components/illustrations/EmptyIllustrations";
+import { EmptyState } from "./components/ui/EmptyState";
+import { Logo } from "./components/ui/Logo";
+import { ProductCard } from "./components/ui/ProductCard";
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount, setCartCount] = useState(2);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState ('');
+  const [password, setPassword] = useState('');
   const [quantityVal, setQuantityVal] = useState(2);
+  const [selectedRadio, setSelectRadio] = useState("option1");
+  const [isChecked, setIsChecked] = useState(true);
+  const dummyProduct = {
+  id: "1",
+  name: "Product Name",
+  price: 100000,
+  rating: 5.0,
+  image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", // Contoh gambar headphone
+};
 
   const iconList = [
     { name: 'Plus', component: <PlusIcon className="w-6 h-6" /> },
@@ -42,6 +63,11 @@ export default function App() {
     { name: 'Copy', component: <CopyIcon className="w-6 h-6" /> },
     { name: 'Eye Off', component: <EyeOffIcon className="w-6 h-6" /> },
     { name: 'Trash', component: <TrashIcon className="w-6 h-6" /> },
+    { name: 'Instagram', component: <InstagramIcon className="w-6 h-6 text-pink-600" /> },
+    { name: 'GitHub', component: <GitHubIcon className="w-6 h-6 text-slate-800" /> },
+    { name: 'Facebook', component: <FacebookIcon className="w-6 h-6 text-blue-600" /> },
+    { name: 'LinkedIn', component: <LinkedinIcon className="w-6 h-6 text-blue-700" /> },
+    { name: 'Gmail', component: <GmailIcon className="w-6 h-6 text-red-500" /> },
   ];
 
   return (
@@ -95,9 +121,9 @@ export default function App() {
           </div>
         </section>
 
-        {/* SECTION 3: GALERI ICON */}
+        {/* SECTION 3: GALERI ICON & SOCIAL MEDIA */}
         <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">Icon</h1>
+          <h1 className="text-2xl font-bold text-slate-800 mb-2">Galeri Icon & Social Media</h1>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {iconList.map((icon, index) => (
               <div
@@ -123,20 +149,16 @@ export default function App() {
           </div>
         </section>
 
-        {/* SECTION 1: CART BUTTON & BADGE */}
+        {/* SECTION 5: CART BUTTON & BADGE */}
         <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <h1 className="text-2xl font-bold text-slate-800">Cart Badge UI</h1>
-          
           <div className="flex items-center gap-6">
-            {/* Tampilan Cart Button dengan Badge */}
             <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
               <CartButton 
                 count={cartCount} 
                 onClick={() => alert(`Keranjang berisi ${cartCount} item`)} 
               />
             </div>
-
-            {/* Tombol Simulasi Tambah / Kurang Angka Badge */}
             <div className="flex items-center gap-2">
               <Button 
                 variant="secondary" 
@@ -155,12 +177,10 @@ export default function App() {
           </div>
         </section>
 
-                {/* SECTION INPUT FIELD */}
-        <section className="w-[1120px] p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        {/* SECTION 6: INPUT FIELD */}
+        <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
           <h1 className="text-2xl font-bold text-slate-800">Input Field UI</h1>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Input Biasa */}
             <InputFeild
               label="Email"
               placeholder="Masukkan email kamu"
@@ -168,8 +188,6 @@ export default function App() {
               onChange={(e) => setEmail(e.target.value)}
               helperText="Gunakan email aktif."
             />
-
-            {/* Input Password dengan Toggle Eye Icon */}
             <InputFeild
               label="Password"
               type="password"
@@ -180,10 +198,9 @@ export default function App() {
           </div>
         </section>
 
-          {/* SECTION QUANTITY */}
+        {/* SECTION 7: QUANTITY */}
         <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <h1 className="text-2xl font-bold text-slate-800">Quantity UI</h1>
-
           <div className="flex items-center gap-6">
             <Quantity
               value={quantityVal}
@@ -191,12 +208,127 @@ export default function App() {
               min={1}
               max={10}
             />
-
             <span className="text-sm text-slate-600">
               Jumlah terpilih: <strong className="text-slate-900">{quantityVal}</strong>
             </span>
           </div>
         </section>
+
+        {/* SECTION RADIO BUTTON & CHECKBOX */}
+        <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+          <h1 className="text-2xl font-bold text-slate-800">Radio Button & Checkbox UI</h1>
+          <div className="gird grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-slate-500 ">Radio Buttons</h3>
+              <div className=" flex flex-wrap items-center gap-6">
+                <RadioButton
+                  name="demo-audio"
+                  label="Default"
+                  value="option1"
+                  checked={selectedRadio === "option1"}
+                  onChange={(e) => setSelectRadio(e.target.value)}
+                />
+                <RadioButton
+                  name="demo-radio"
+                  label="Error State"
+                  value="option2"
+                  error
+                  checked={selectedRadio === "option2"}
+                  onChange={(e) => setSelectRadio(e.target.value)}
+                />
+                <RadioButton
+                  name="demo-radio"
+                  label="Active State"
+                  value="option3"
+                  checked={selectedRadio === "option3"}
+                  onChange={(e) => setSelectRadio(e.target.value)}
+                />
+                <RadioButton
+                  name="demo-radio"
+                  label="Disabled"
+                  value="option4"
+                  disabled
+                />
+              </div>
+            </div>
+
+          {/* Demo Checkboxes */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-slate-500 ">Checkboxes</h3>
+            <div className="flex flex-wrap items-center gap-6">
+              <Checkbox
+                label="Checked Default"
+                defaultChecked
+              />
+              <Checkbox
+                label="Disabled State"
+                disabled
+              />
+            </div>
+          </div>
+          </div>
+        </section>
+
+        <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <h1 className="text-2xl font-bold text-slate-800">Empty State UI</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-100 pt-6">
+            {/* State 1: Cart Empty */}
+                  <div className="p-4 border border-slate-100 rounded-xl bg-slate-50">
+                    <EmptyState
+                      icon={<EmptyCartIllustration className="w-40 h-40" />}
+                      title="Your cart is empty"
+                      description="Please search for the product first"
+                      actionLabel="Search Product"
+                      onAction={() => alert('Mencari produk...')}
+                      />
+                  </div>
+
+      {/* State 2: Product Not Found */}
+          <div className="p-4 border border-slate-100 rounded-xl bg-slate-50">
+      <       EmptyState
+                icon={<EmptySearchIllustration className="w-40 h-40" />}
+                title="Product Not Found"
+                description="Change Your Keywords"
+              />
+          </div>
+      </div>
+    </section>
+
+
+     {/* SECTION LOGO */}
+    <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <h1 className="text-2xl font-bold text-slate-800">Logo UI</h1>
+  
+      <div className="flex items-center gap-8 p-4 bg-slate-50 rounded-xl border border-slate-200">
+      {/* Logo Lengkap (Icon + Text) */}
+      <div className="flex flex-col gap-1">
+        <span className="text-xs font-semibold text-slate-400 uppercase">Logo + Text</span>
+      <Logo />
+      </div>
+
+      {/* Logo Icon Saja */}
+      <div className="flex flex-col gap-1">
+        <span className="text-xs font-semibold text-slate-400 uppercase">Icon Only</span>
+      <Logo showText={false} />
+    </div>
+  </div>
+    </section>
+
+    <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+      <h1 className="text-2xl font-bold text-slate-800">Product Card UI</h1>
+        <div className="flex flex-wrap items-start gap-8 bg-slate-50 p-6 rounded-xl border border-slate-200">
+    {/* Varian Default (Ukuran Standar) */}
+        <div className="space-y-2">
+          <span className="text-xs font-semibold text-slate-400 uppercase">Default Size</span>
+          <ProductCard product={dummyProduct} />
+        </div>
+    {/* Varian Compact (Ukuran Kecil) */}
+    <div className="space-y-2">
+      <span className="text-xs font-semibold text-slate-400 uppercase">Compact Size</span>
+      <ProductCard product={dummyProduct} variant="compact" />
+    </div>
+  </div>
+  </section>  
       </div>
     </div>
   );
