@@ -17,11 +17,11 @@ className = '',
 }: ButtonProps) => {
 
 const baseStyles = 
-    'inline-flex items-center justify-center font-semibold text-sm px-4 py-2.5 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ';
+    'inline-flex items-center justify-center whitespace-nowrap font-semibold text-sm px-6 py-2.5 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ';
 
 const variantStyles = variant === 'primary'
-    ? 'bg-blue-600 text-white hover:bg-blue-900 active:bg-blue-800 focus:ring-bg-blue-500' // <- isi sendiri styling primary
-    : 'bg-white text-black hover:bg-slate-200 active:bg-slate-200 border border-slate-200'; // <- isi sendiri styling secondary
+    ? 'bg-blue-600 text-white hover:bg-blue-900 active:bg-blue-800 focus:ring-bg-blue-500'
+    : 'bg-white text-black hover:bg-slate-200 active:bg-slate-200 border border-slate-200';
 
 const widthStyle = fullWidth ? 'w-full' : '';
 

@@ -32,6 +32,9 @@ import { EmptySearchIllustration } from "./components/illustrations/EmptyIllustr
 import { EmptyState } from "./components/ui/EmptyState";
 import { Logo } from "./components/ui/Logo";
 import { ProductCard } from "./components/ui/ProductCard";
+import { CartItem } from "./components/ui/CartItem";
+import { CartItemType } from "./types/product";
+import { Header } from "./components/layout/Header";
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,6 +43,7 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [quantityVal, setQuantityVal] = useState(2);
   const [selectedRadio, setSelectRadio] = useState("option1");
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isChecked, setIsChecked] = useState(true);
   const dummyProduct = {
   id: "1",
@@ -48,6 +52,38 @@ export default function App() {
   rating: 5.0,
   image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", // Contoh gambar headphone
 };
+
+  const [cartList, setCartList] = useState<CartItemType[]>([
+    {
+      product: {
+        id: "1",
+        name: "product Name",
+        price: 100000,
+        rating: 5.0,
+        category: "Category",
+        image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
+      },
+      quantity: 2,
+      selected: true,
+    },
+  ]);
+
+  const handleQuantityChange = (index: number, newQty: number) => {
+    const updated = [...cartList];
+    updated[index].quantity = newQty;
+    setCartList(updated);
+  };
+
+  const handleSelectChange = (index: number, selected: boolean) => {
+    const updated = [...cartList];
+    updated[index].selected = selected;
+    setCartList(updated);
+  };
+
+  const handleRemove = (index: number) => {
+    setCartList((prev) => prev.filter((_, i) => i !== index));
+  };
+
 
   const iconList = [
     { name: 'Plus', component: <PlusIcon className="w-6 h-6" /> },
@@ -72,7 +108,36 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-8 space-y-10">
+      {/* HEADER LIVE PREVIEW */}
+      <Header
+        cartCount={6}
+        isLoggedIn={isLoggedIn}
+        userName="John Doe"
+        onSearch={(val) => console.log("Search:", val)}
+        onCartClick={() => alert("Cart diklik")}
+      />
+
       <div className="max-w-[1120px] mx-auto space-y-8">
+
+        {/* CONTROLLER TOGGLE STATE HEADER */}
+        <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <h1 className="text-xl font-bold text-slate-800">Uji Coba Header State</h1>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant={!isLoggedIn ? "primary" : "secondary"}
+              onClick={() => setIsLoggedIn(false)}
+            >
+              Mode Guest (Belum Login)
+            </Button>
+            <Button 
+              variant={isLoggedIn ? "primary" : "secondary"}
+              onClick={() => setIsLoggedIn(true)}
+            >
+              Mode Logged In (John Doe)
+            </Button>
+          </div>
+        </section>
+
         
         {/* SECTION 1: SEARCH BAR */}
         <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -329,6 +394,28 @@ export default function App() {
     </div>
   </div>
   </section>  
+
+
+    {/* SECTION CART LIST */}
+        <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <h1 className="text-2xl font-bold text-slate-800">Cart List UI</h1>
+
+          {cartList.length > 0 ? (
+            <div className="space-y-4">
+              {cartList.map((item, idx) => (
+                <CartItem
+                  key={item.product.id}
+                  item={item}
+                  onSelectChange={(selected) => handleSelectChange(idx, selected)}
+                  onQuantityChange={(qty) => handleQuantityChange(idx, qty)}
+                  onRemove={() => handleRemove(idx)}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-slate-400 italic">Keranjang kosong (Semua item dihapus)</p>
+          )}
+        </section>
       </div>
     </div>
   );
