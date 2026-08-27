@@ -29,10 +29,10 @@ export const Header = ({
 
     return (
         <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200">
-            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
                 {/* LOGO */}
-                <div className="shrink-0">
+                <div className="shrink-0 flex items-center">
                     <Logo />
                 </div>
 
@@ -53,7 +53,6 @@ export const Header = ({
                 {/* RIGHT SIDE ACTIONS (Desktop/Tablet) */}
                 <div className="hidden md:flex items-center gap-4 shrink-0">
                     <CartButton count={cartCount} onClick={onCartClick} />
-
                     {isLoggedIn ? (
                         <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-slate-800 text-sm font-semibold cursor-pointer hover:bg-slate-100 transition-colors">
                             <span>{userName}</span>
@@ -63,21 +62,20 @@ export const Header = ({
                         </div>
                     ) : (
                         <div className="flex items-center gap-2.5">
-                            <Button variant="secondary" onClick={onLoginClick}>
-                                Login
-                            </Button>
-                            <Button variant="primary" onClick={onRegisterClick}>
-                                Register
-                            </Button>
+                            <Button variant="secondary" onClick={onLoginClick}>Login</Button>
+                            <Button variant="primary" onClick={onRegisterClick}>Register</Button>
                         </div>
                     )}
                 </div>
 
                 {/* MOBILE ACTION ICONS */}
-                <div className="flex md:hidden items-center gap-2 ml-auto">
+                <div
+                    className={`flex md:hidden items-center gap-6 transition-all duration-300 ease-out 
+                        ${isMobileSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
                     <button
                         type="button"
-                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
                         aria-label="Category"
                     >
                         <GridIcon className="w-5 h-5" />
@@ -86,10 +84,10 @@ export const Header = ({
                     <button
                         type="button"
                         onClick={() => {
-                            setIsMobileSearchOpen((prev) => !prev);
+                            setIsMobileSearchOpen(true);
                             setIsMobileMenuOpen(false);
                         }}
-                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
                         aria-label="Search"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,7 +95,9 @@ export const Header = ({
                         </svg>
                     </button>
 
-                    <CartButton count={cartCount} onClick={onCartClick} />
+                    <div className="flex items-center shrink-0">
+                        <CartButton count={cartCount} onClick={onCartClick} />
+                    </div>
 
                     <button
                         type="button"
@@ -105,17 +105,20 @@ export const Header = ({
                             setIsMobileMenuOpen((prev) => !prev);
                             setIsMobileSearchOpen(false);
                         }}
-                        className="w-9 h-9 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg focus:outline-none"
+                        className="w-9 h-9 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg focus:outline-none shrink-0"
                         aria-label="Toggle Menu"
                     >
                         {isMobileMenuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuHamburgerIcon className="w-6 h-6" />}
                     </button>
                 </div>
-            </div>
 
-            {/* MOBILE SEARCH BAR — hanya muncul saat icon search di-klik */}
-            {isMobileSearchOpen && (
-                <div className="md:hidden flex items-center gap-2 px-4 pb-3">
+                {/* MOBILE SEARCH OVERLAY */}
+                <div
+                    className={`absolute inset-0 md:hidden flex items-center gap-2 bg-white px-4 transition-all duration-300 ease-out z-10
+                        ${isMobileSearchOpen
+                            ? 'opacity-100 translate-y-0 pointer-events-auto'
+                            : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+                >
                     <div className="flex-1">
                         <SearchBar placeholder="Search" onSearch={onSearch} />
                     </div>
@@ -130,27 +133,25 @@ export const Header = ({
                         </svg>
                     </button>
                 </div>
-            )}
+            </div>
 
-            {/* MOBILE DROPDOWN MENU */}
+            {/* MOBILE MENU FULL-SCREEN OVERLAY */}
             {isMobileMenuOpen && (
-                <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-4 shadow-lg">
-                    <div className="font-bold text-slate-800 text-lg">Menu</div>
-                    {isLoggedIn ? (
-                        <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
-                            <span className="font-semibold text-slate-800">{userName}</span>
-                            <span className="text-xs text-blue-600 font-bold">Aktif</span>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col gap-2 pt-2">
-                            <Button variant="secondary" fullWidth onClick={onLoginClick}>
-                                Login
-                            </Button>
-                            <Button variant="primary" fullWidth onClick={onRegisterClick}>
-                                Register
-                            </Button>
-                        </div>
-                    )}
+                <div className="fixed inset-0 top-20 z-40 bg-white md:hidden p-6 flex flex-col justify-between overflow-y-auto">
+                    <div className="space-y-6">
+                        <div className="text-2xl font-bold text-slate-900">Menu</div>
+                        {isLoggedIn ? (
+                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                                <span className="font-semibold text-slate-800">{userName}</span>
+                                <span className="text-xs text-blue-600 font-bold bg-blue-50 px-2.5 py-1 rounded-full">Aktif</span>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-3 pt-2">
+                                <Button variant="secondary" fullWidth onClick={onLoginClick} className="py-3 text-base font-semibold">Login</Button>
+                                <Button variant="primary" fullWidth onClick={onRegisterClick} className="py-3 text-base font-semibold">Register</Button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
         </header>

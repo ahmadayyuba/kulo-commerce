@@ -142,3 +142,9 @@ export const StarIcon = ({ className = "w-4 h-4", ...props }: IconProps) => (
     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
 </svg>
 );
+
+export const TiktokIcon = ({ className = "w-4 h-4", ...props }: SVGProps<SVGSVGElement>) => (
+<svg viewBox="0 0 24 24" fill="currentColor" className={className} {...props}>
+    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 2.404A6.335 6.335 0 0 0 4 15.672a6.336 6.336 0 0 0 6.336 6.336 6.33 6.33 0 0 0 6.336-6.336V9.11a8.217 8.217 0 0 0 4.917 1.576V7.24a4.8 4.8 0 0 1-2.000-.554z" />
+</svg>
+);

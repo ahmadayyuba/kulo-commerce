@@ -35,6 +35,8 @@ import { ProductCard } from "./components/ui/ProductCard";
 import { CartItem } from "./components/ui/CartItem";
 import { CartItemType } from "./types/product";
 import { Header } from "./components/layout/Header";
+import { CheckoutItem } from "./components/ui/CheckoutItem";
+import { Footer } from "./components/layout/Footer";
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,12 +47,25 @@ export default function App() {
   const [selectedRadio, setSelectRadio] = useState("option1");
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isChecked, setIsChecked] = useState(true);
+
   const dummyProduct = {
   id: "1",
   name: "Product Name",
   price: 100000,
   rating: 5.0,
   image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", // Contoh gambar headphone
+};
+
+  const dummyCheckoutItem = {
+  product: {
+    id: "1",
+    name: "Product Name",
+    price: 100000,
+    rating: 5.0,
+    category: "Category",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
+  },
+  quantity: 2,
 };
 
   const [cartList, setCartList] = useState<CartItemType[]>([
@@ -416,7 +431,19 @@ export default function App() {
             <p className="text-sm text-slate-400 italic">Keranjang kosong (Semua item dihapus)</p>
           )}
         </section>
+
+      {/* SECTION LIST CHECKOUT */}
+    <section className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <h1 className="text-2xl font-bold text-slate-800">List Checkout UI</h1>
+        <div className="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+          <CheckoutItem item={dummyCheckoutItem} />
+        </div>
+    </section>     
+
+
+      <Footer/>
       </div>
     </div>
   );
 }
+
