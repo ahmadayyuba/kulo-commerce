@@ -40,7 +40,7 @@ export const CartItem = ({
                     <img
                         src={item.product.image}
                         alt={item.product.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cove"
                     />
                 ) : (
                     <span className="text-[10px] text-slate-400">

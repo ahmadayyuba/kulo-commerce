@@ -15,13 +15,12 @@ export const ProductCard = ({
     className = '',
 }: ProductCardProps) => {
     
-    const formatRupiah = (price: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(price);
-    };80
+const formatUSD = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(price);
+};
 
     const isCompact = variant === 'compact';
 
@@ -35,7 +34,7 @@ export const ProductCard = ({
                     <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                     />
                 ) : (
                     <span className="text-xs text-slate-400">
@@ -47,7 +46,7 @@ export const ProductCard = ({
       {/* Informasi Produk */}
     <div className="flex flex-col flex-1 justify-between space-y-2">
         <div>
-        <h3 className={`font-normal text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors ${
+        <h3 className={`font-normal text-slate-800 line-clamp-1 ${
             isCompact ? 'text-xs' : 'text-sm'
         }`}>
             {product.name}
@@ -55,7 +54,7 @@ export const ProductCard = ({
         <p className={`font-bold text-slate-900 mt-1 ${
             isCompact ? 'text-sm' : 'text-base'
         }`}>
-            {formatRupiah(product.price)}
+            {formatUSD(product.price)}
         </p>
         </div>
 
