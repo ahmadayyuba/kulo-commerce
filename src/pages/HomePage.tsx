@@ -5,7 +5,12 @@ import { Button } from "../components/ui/button";
 import { Product } from "../types/product";
 import { fetchProducts } from "../service/productService";
 
-export const HomePage = () => {
+
+interface HomePageProps {
+    onAddToCart?: () => void;
+}
+
+export const HomePage = ({onAddToCart} : HomePageProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [displayCount, setDisplayCount] = useState(10);
@@ -59,6 +64,7 @@ export const HomePage = () => {
                 key={product.id}
                 product={product}
                 onClick={() => console.log('Detail produk:', product.id)}
+                onAddToCart={onAddToCart}
                 />
             ))}
             </div>
