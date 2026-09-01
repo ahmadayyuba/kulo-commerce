@@ -3,7 +3,8 @@ import { Logo } from '../ui/Logo';
 import { SearchBar } from '../ui/SearchBar';
 import { CartButton } from '../ui/CartButton';
 import { Button } from '../ui/button';
-import { GridIcon, MenuHamburgerIcon, CloseIcon } from '../../assets/icons/icon';
+import { MenuHamburgerIcon, CloseIcon } from '../../assets/icons/icon';
+import { CategoryDropdown } from '../ui/CategoryDropdown';
 
 interface HeaderProps {
     cartCount?: number;
@@ -13,6 +14,9 @@ interface HeaderProps {
     onCartClick?: () => void;
     onLoginClick?: () => void;
     onRegisterClick?: () => void;
+    // ✅ 1. Tambahkan Prop Filter Kategori
+    onSelectCategory?: (category: string | null) => void;
+    selectedCategory?: string | null;
 }
 
 export const Header = ({
@@ -23,6 +27,8 @@ export const Header = ({
     onCartClick,
     onLoginClick,
     onRegisterClick,
+    onSelectCategory,
+    selectedCategory,
 }: HeaderProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -38,13 +44,12 @@ export const Header = ({
 
                 {/* CATEGORY + SEARCH (Desktop/Tablet) */}
                 <div className="hidden md:flex items-center gap-4 flex-1">
-                    <button
-                        type="button"
-                        className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors shrink-0"
-                    >
-                        <GridIcon className="w-5 h-5 text-slate-600" />
-                        <span>Category</span>
-                    </button>
+                    {/* ✅ 2. GANTI BUTTON STATIS DENGAN CATEGORY DROPDOWN */}
+                    <CategoryDropdown 
+                        onSelectCategory={onSelectCategory}
+                        selectedCategory={selectedCategory}
+                    />
+
                     <div className="flex-1">
                         <SearchBar placeholder="Search..." onSearch={onSearch} />
                     </div>
@@ -73,13 +78,12 @@ export const Header = ({
                     className={`flex md:hidden items-center gap-6 transition-all duration-300 ease-out 
                         ${isMobileSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 >
-                    <button
-                        type="button"
-                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
-                        aria-label="Category"
-                    >
-                        <GridIcon className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-4 items-center shrink-0 mr-10 ">
+                    {/* ✅ 3. PASANG DROPDOWN JUGA DI MOBILE ACTION */}
+                    <CategoryDropdown 
+                        onSelectCategory={onSelectCategory}
+                        selectedCategory={selectedCategory}
+                    />
 
                     <button
                         type="button"
@@ -87,7 +91,7 @@ export const Header = ({
                             setIsMobileSearchOpen(true);
                             setIsMobileMenuOpen(false);
                         }}
-                        className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
+                        className="w-11 h-11 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
                         aria-label="Search"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +102,9 @@ export const Header = ({
                     <div className="flex items-center shrink-0">
                         <CartButton count={cartCount} onClick={onCartClick} />
                     </div>
+                    </div>
 
+                    <div>
                     <button
                         type="button"
                         onClick={() => {
@@ -110,6 +116,7 @@ export const Header = ({
                     >
                         {isMobileMenuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuHamburgerIcon className="w-6 h-6" />}
                     </button>
+                    </div>
                 </div>
 
                 {/* MOBILE SEARCH OVERLAY */}

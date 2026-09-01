@@ -10,6 +10,7 @@ export default function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const handleAddToCart = () => {
     if (!isLoggedIn) {
@@ -28,6 +29,7 @@ export default function App() {
           userName="John Doe"
           onLoginClick={() => setIsLoginModalOpen(true)}
           onRegisterClick={() => setIsRegisterModalOpen(true)}
+          onSelectCategory={(category) => setSelectedCategory(category)}
         />
 
         <HomePage onAddToCart={handleAddToCart} />

@@ -16,7 +16,7 @@ export const CartButton = ({
         <button
             type="button"
             onClick={onClick}
-            className={`relative inline-flex items-center justify-center p-2 rounded-full text-slate-800 hover:bg-slate-100 transition-colors focus:outline-none ${className}`}
+            className={`relative inline-flex items-center justify-center p-2 rounded-full text-slate-800 hover:bg-slate-100 transition-colors focus:outline-none border border-slate-200  ${className}`}
             aria-label="Keranjang Belanja"
         >
         <ShoppingCartIcon className="w-6 h-6"/>
