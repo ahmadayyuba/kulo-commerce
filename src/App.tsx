@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
+import { SearchPage } from './pages/SearchPage';
 import { LoginModal } from './components/auth/LoginModal';
 import { RegisterModal } from './components/auth/RegisterModal';
 
 export default function App() {
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const handleAddToCart = () => {
     if (!isLoggedIn) {
@@ -27,41 +28,38 @@ export default function App() {
           cartCount={cartCount}
           isLoggedIn={isLoggedIn}
           userName="John Doe"
+          onSearch={(val) => setSearchQuery(val)}
           onLoginClick={() => setIsLoginModalOpen(true)}
           onRegisterClick={() => setIsRegisterModalOpen(true)}
-          onSelectCategory={(category) => setSelectedCategory(category)}
         />
 
-        <HomePage onAddToCart={handleAddToCart} />
+        {/* Tampilkan SearchPage jika input terisi, atau HomePage jika input kosong */}
+        {searchQuery ? (
+          <SearchPage searchQuery={searchQuery} onAddToCart={handleAddToCart} />
+        ) : (
+          <HomePage onAddToCart={handleAddToCart} />
+        )}
       </div>
 
       <Footer />
 
-      {/* POP-UP MODAL LOGIN */}
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onLoginSuccess={() => {
-          setIsLoggedIn(true);
-          alert('Login Berhasil!');
-        }}
+        onLoginSuccess={() => setIsLoggedIn(true)}
         onSwitchToRegister={() => {
           setIsLoginModalOpen(false);
-          setIsRegisterModalOpen(true); // Pindah ke Register Modal
+          setIsRegisterModalOpen(true);
         }}
       />
 
-      {/* POP-UP MODAL REGISTER */}
       <RegisterModal
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
-        onRegisterSuccess={() => {
-          setIsLoggedIn(true);
-          alert('Registrasi Berhasil! Anda otomatis login.');
-        }}
+        onRegisterSuccess={() => setIsLoggedIn(true)}
         onSwitchToLogin={() => {
           setIsRegisterModalOpen(false);
-          setIsLoginModalOpen(true); // Pindah ke Login Modal
+          setIsLoginModalOpen(true);
         }}
       />
     </div>
