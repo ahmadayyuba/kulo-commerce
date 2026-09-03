@@ -3,10 +3,12 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { SearchPage } from './pages/SearchPage';
+import { CategoryPage } from './pages/CategoryPage';
 import { LoginModal } from './components/auth/LoginModal';
 import { RegisterModal } from './components/auth/RegisterModal';
 
 export default function App() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -28,14 +30,22 @@ export default function App() {
           cartCount={cartCount}
           isLoggedIn={isLoggedIn}
           userName="John Doe"
+          selectedCategory={selectedCategory}
+          onSelectCategory={(cat) => setSelectedCategory(cat)}
           onSearch={(val) => setSearchQuery(val)}
           onLoginClick={() => setIsLoginModalOpen(true)}
           onRegisterClick={() => setIsRegisterModalOpen(true)}
         />
 
-        {/* Tampilkan SearchPage jika input terisi, atau HomePage jika input kosong */}
+        {/* PENGONDISIAN HALAMAN AMBANG */}
         {searchQuery ? (
           <SearchPage searchQuery={searchQuery} onAddToCart={handleAddToCart} />
+        ) : selectedCategory ? (
+          <CategoryPage
+            selectedCategory={selectedCategory}
+            onSelectCategory={(cat) => setSelectedCategory(cat)}
+            onAddToCart={handleAddToCart}
+          />
         ) : (
           <HomePage onAddToCart={handleAddToCart} />
         )}
