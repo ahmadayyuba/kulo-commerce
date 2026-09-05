@@ -9,12 +9,14 @@ interface CategoryPageProps {
     selectedCategory: string;
     onSelectCategory: (category: string | null) => void;
     onAddToCart?: () => void;
+    onSelectProduct?: (id: number) => void;
 }
 
 export const CategoryPage = ({
     selectedCategory,
     onSelectCategory,
     onAddToCart,
+    onSelectProduct,
 }: CategoryPageProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -60,18 +62,20 @@ export const CategoryPage = ({
                     </span>
                 </nav>
 
-                {/* 2. HEADER SECTION (Judul & Filter Dropdown) */}
-                <div className="flex items-center justify-between gap-4 border-slate-100 pb-4">
-                    <h1 className="text-xl sm:text-2xl font-bold text-slate-900 capitalize">
-                        {formattedCategoryName}
-                    </h1>
-                    {/* Category Filter Dropdown */}
-                    <CategoryDropdown
-                        selectedCategory={selectedCategory}
-                        onSelectCategory={onSelectCategory}
-                    />
-                </div>
+            {/* 2. HEADER SECTION (Judul & Filter Dropdown) */}
+            <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 capitalize">
+                    {formattedCategoryName}
+                </h1>
 
+            {/* Category Filter Dropdown dengan align="right" */}
+                <CategoryDropdown
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={onSelectCategory}
+                    align="right"
+                />
+            </div>
+            
         {/* 3. PRODUCT GRID DENGAN SKELETON & ANIMASI FRAMER MOTION */}
         {loading ? (
         // SKELETON LOADING STATE
@@ -101,7 +105,13 @@ export const CategoryPage = ({
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.25, delay: index * 0.05 }}
                 >
-                    <ProductCard product={product} onAddToCart={onAddToCart} />
+                <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={onAddToCart}
+                    onClick={() => onSelectProduct && onSelectProduct(product.id)} // ✅ Pasang callback
+                />
+                
                 </motion.div>
                 ))}
                 </motion.div>

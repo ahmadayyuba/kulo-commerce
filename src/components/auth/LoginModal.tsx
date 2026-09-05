@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import { CloseIcon, EyeIcon, EyeOffIcon } from "../../assets/icons/icon";
-import { Button } from "../ui/button"
+import { Button } from "../ui/button";
+import { supabase } from "../../lib/supabase"; // ✅ 1. Import Client Supabase
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -18,20 +19,41 @@ export const LoginModal = ({
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(email && password) {
-            onLoginSuccess();
-            onClose();
+        setLoading(true);
+        setErrorMsg(null);
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        setLoading(false);
+
+        if (error) {
+            if (error.message.includes("Email not confirmed")) {
+                setErrorMsg("Email belum dikonfirmasi! Silakan cek kotak masuk/spam email kamu.");
+        } 
+
+        else {
+        setErrorMsg(error.message);
         }
+        
+        return;
+        }
+
+        onLoginSuccess();
+        onClose();
     };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* 1. OVERLAY HITAM TRANSPARAN (Latar Belakang Tipis) */}
             <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] transition-opacity
             "
             onClick={onClose}
@@ -52,7 +74,6 @@ export const LoginModal = ({
 
             {/* Form Inputs */}
             <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Input Email */}
                 <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-700">
                     Email
@@ -96,25 +117,24 @@ export const LoginModal = ({
                 </div>
             </div>
 
-        {/* Tombol Login */}
-        <div className="pt-2 space-y-3">
-            <Button variant="primary" fullWidth type="submit" className="py-3">
-                Login
-            </Button>
+                    {/* Tombol Login */}
+                    <div className="pt-2 space-y-3">
+                        <Button variant="primary" fullWidth type="submit" disabled={loading} className="py-3">
+                            {loading ? 'Logging in...' : 'Login'}
+                        </Button>
 
-        {/* Link Switch ke Register */}
-        <div className="text-center">
-            <button
-                type="button"
-                onClick={onSwitchToRegister}
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
-            >
-                Register
-            </button>
+                        <div className="text-center">
+                            <button
+                                type="button"
+                                onClick={onSwitchToRegister}
+                                className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                            >
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
-</div>
-</div>
-    )
-}
+    );
+};

@@ -17,6 +17,7 @@ interface HeaderProps {
     // ✅ 1. Tambahkan Prop Filter Kategori
     onSelectCategory?: (category: string | null) => void;
     selectedCategory?: string | null;
+    onGoHome?: () => void;
 }
 
 export const Header = ({
@@ -29,6 +30,7 @@ export const Header = ({
     onRegisterClick,
     onSelectCategory,
     selectedCategory,
+    onGoHome,
 }: HeaderProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -37,10 +39,15 @@ export const Header = ({
         <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200">
             <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
-                {/* LOGO */}
-                <div className="shrink-0 flex items-center">
-                    <Logo />
-                </div>
+            {/* 1. LOGO DENGAN INTERAKSI GO HOME */}
+            <button
+                type="button"
+                onClick={onGoHome}
+                className="shrink-0 flex items-center text-left focus:outline-none cursor-pointer group"
+                aria-label="Go to Home"
+            >
+            <Logo />
+            </button>
 
                 {/* CATEGORY + SEARCH (Desktop/Tablet) */}
                 <div className="hidden md:flex items-center gap-4 flex-1">
@@ -75,10 +82,10 @@ export const Header = ({
 
                 {/* MOBILE ACTION ICONS */}
                 <div
-                    className={`flex md:hidden items-center gap-6 transition-all duration-300 ease-out 
+                    className={`flex-1 md:hidden flex items-center justify-between gap-2 transition-all duration-300 ease-out
                         ${isMobileSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 >
-                    <div className="flex gap-4 items-center shrink-0 mr-10 ">
+                    <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 shrink-0">
                     {/* ✅ 3. PASANG DROPDOWN JUGA DI MOBILE ACTION */}
                     <CategoryDropdown 
                         onSelectCategory={onSelectCategory}
@@ -91,7 +98,7 @@ export const Header = ({
                             setIsMobileSearchOpen(true);
                             setIsMobileMenuOpen(false);
                         }}
-                        className="w-11 h-11 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
+                        className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shrink-0"
                         aria-label="Search"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,7 +118,7 @@ export const Header = ({
                             setIsMobileMenuOpen((prev) => !prev);
                             setIsMobileSearchOpen(false);
                         }}
-                        className="w-9 h-9 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg focus:outline-none shrink-0"
+                        className="w-9 h-9 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-xl focus:outline-none shrink-0 ml-auto"
                         aria-label="Toggle Menu"
                     >
                         {isMobileMenuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuHamburgerIcon className="w-6 h-6" />}

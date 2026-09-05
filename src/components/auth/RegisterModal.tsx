@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { CloseIcon, EyeIcon, EyeOffIcon } from "../../assets/icons/icon";
 import { Button } from "../ui/button";
-
+import { supabase } from "../../lib/supabase";
 interface RegisterModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -19,16 +19,36 @@ export const RegisterModal = ({
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (name && email && password) {
+        setLoading(true);
+        setErrorMsg(null);
+
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: name,
+                },
+            },
+        });
+
+        setLoading(false);
+
+        if (error) {
+            setErrorMsg(error.message);
+            return;
+        }
+
         onRegisterSuccess();
         onClose();
-    }
-};
+    };
 
 return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -51,6 +71,12 @@ return (
                     <CloseIcon className="w-6 h-6"/>
                 </button>
             </div>
+
+            {errorMsg && (
+            <div className="p-3 bg-red-50 text-red-600 text-xs font-semibold rounded-xl border border-red-200">
+                {errorMsg}
+            </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
             {/* Input Name */}
@@ -111,25 +137,23 @@ return (
                 </div>
             </div>
 
-            {/* Tombol Register */}
-            <div className="pt-2 space-y-3">
-                <Button variant="primary" fullWidth type="submit" className="py-3">
-                Register
-                </Button>
+                <div className="pt-2 space-y-3">
+                        <Button variant="primary" fullWidth type="submit" disabled={loading} className="py-3">
+                            {loading ? 'Creating account...' : 'Register'}
+                        </Button>
 
-            {/* Link Switch ke Login */}
-            <div className="text-center">
-                <button
-                    type="button"
-                    onClick={onSwitchToLogin}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
-                >
-                Login
-                </button>
+                        <div className="text-center">
+                            <button
+                                type="button"
+                                onClick={onSwitchToLogin}
+                                className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                            >
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            </div>
-        </form>
-    </div>
-</div>
-);
+        </div>
+    );
 };

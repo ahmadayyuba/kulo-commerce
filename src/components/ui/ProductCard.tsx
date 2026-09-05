@@ -1,11 +1,12 @@
 import { Product } from "../../types/product";
 import { StarIcon } from "../../assets/icons/icon";
+import { formatUSD } from "../../utils/format";
 
 interface ProductCardProps {
     product: Product;
     variant?: 'default' | 'compact';
     onClick?: () => void;
-    onAddToCart?: () => void; // <- FIX 1: Tambahkan void
+    onAddToCart?: () => void; 
     className?: string;
 }
 
@@ -16,20 +17,14 @@ export const ProductCard = ({
     onAddToCart, 
     className = '',
 }: ProductCardProps) => {
-    
-    const formatUSD = (price: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(price);
-    };
-
     const isCompact = variant === 'compact';
 
     return (
         <div
-            onClick={onClick || onAddToCart} 
-            className={`group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-sm transition-all duration-200 cursor-pointer overflow-hidden flex flex-col ${isCompact ? 'w-48 p-3' : 'w-full max-w-[280px] p-4'} ${className}`}
+            onClick={onClick} 
+            className={`group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-sm transition-all duration-200 cursor-pointer overflow-hidden flex flex-col ${
+            isCompact ? 'w-48 p-3' : 'w-full max-w-[280px] p-4'
+            } ${className}`}
         >
             <div className="w-full aspect-square bg-slate-100 rounded-xl overflow-hidden mb-3 flex items-center justify-center">
                 {product.image ? (
@@ -60,14 +55,26 @@ export const ProductCard = ({
                     </p>
                 </div>
 
-                {/* Rating */}
-                <div className="flex items-center gap-1.5 pt-1">
-                    <StarIcon className={`text-amber-400 ${isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
-                    <span className={`font-semibold text-slate-700 ${isCompact ? 'text-xs' : 'text-sm'}`}>
-                        {product.rating.toFixed(1)}
-                    </span>
-                </div>
+        {/* Rating */}
+        <div className="flex items-center gap-1.5 pt-1">
+            <StarIcon
+                className={`text-amber-400 ${
+                isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'
+            }`}
+        />
+        <span
+            className={`font-semibold text-slate-700 ${
+                isCompact ? 'text-xs' : 'text-sm'
+            }`}
+        >
+            {typeof product.rating === 'object'
+                ? product.rating.rate.toFixed(1)
+                : typeof product.rating === 'number'
+                ? product.rating.toFixed(1)
+                : '4.5'}
+                </span>
             </div>
         </div>
-    );
+    </div>
+);
 };

@@ -8,9 +8,10 @@ import { EmptySearchIllustration } from '../components/illustrations/EmptyIllust
 interface SearchPageProps {
     searchQuery: string;
     onAddToCart?: () => void;
+    onSelectProduct?: (id: number) => void;
 }
 
-export const SearchPage = ({ searchQuery, onAddToCart}: SearchPageProps) => {
+export const SearchPage = ({ searchQuery, onAddToCart, onSelectProduct}: SearchPageProps) => {
     const  [products, setProducts] = useState<Product[]>([])
     const  [loading, setLoading] = useState(true);
 
@@ -80,6 +81,7 @@ const recommendations = products.slice(0, 5);
                 key={product.id}
                 product={product}
                 onAddToCart={onAddToCart}
+                onClick={() => onSelectProduct && onSelectProduct(product.id)}
                 />
             ))}
         </div>

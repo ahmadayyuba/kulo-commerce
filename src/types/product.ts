@@ -1,12 +1,15 @@
 export interface Product {
-    id: string | number;
+    id: number;
     name: string;
     price: number;
-    rating: number;
     image: string;
-    category?: string;
+    category: string;
+    description?: string; // ✅ Tambahkan ini
+    rating?: {
+    rate: number;
+    count: number;
+  } | number; // ✅ Support format object dan number
 }
-
 export interface CartItemType {
     product: Product;
     quantity: number;
