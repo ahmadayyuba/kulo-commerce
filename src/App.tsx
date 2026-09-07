@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
@@ -7,15 +7,52 @@ import { CategoryPage } from './pages/CategoryPage';
 import { LoginModal } from './components/auth/LoginModal';
 import { RegisterModal } from './components/auth/RegisterModal';
 import { ProductDetailPage } from './pages/ProductDetailPage';
+import {supabase} from './lib/supabase';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory, ] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('User');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session);
+      if (session?.user) {
+        setUserName(
+          session.user.user_metadata?.full_name ||
+          session.user.email?.split('@')[0] ||
+          'User'
+        );
+      }
+    });
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+      if (session?.user) {
+        setUserName(
+          session.user.user_metadata?.full_name ||
+          session.user.email?.split('@')[0] ||
+          'User'
+        );
+      } else {
+        setUserName('User');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+    const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsLoggedIn(false);
+    setUserName('User');
+  };
+
 
   const handleAddToCart = () => {
     if (!isLoggedIn) {
@@ -31,7 +68,8 @@ export default function App() {
 <Header
   cartCount={cartCount}
   isLoggedIn={isLoggedIn}
-  userName="John Doe"
+  userName={userName}
+  onLogoutClick={handleLogout}
   selectedCategory={selectedCategory}
   onSelectCategory={(cat) => {
     setSelectedCategory(cat);

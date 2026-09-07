@@ -69,7 +69,7 @@ export const CategoryDropdown = ({
 
         {/* Chevron Arrow Indicator */}
         <svg
-            className={`w-4 h-4 shrink-0 transition-transform duration-200 text-slate-400 hidden lg:block ${
+            className={`w-4 h-4 shrink-0 transition-transform duration-200 text-slate   -400 hidden lg:block ${
                 isOpen ? 'rotate-180 text-blue-600' : ''
             }`}
             fill="none"
@@ -90,7 +90,7 @@ export const CategoryDropdown = ({
     {isOpen && (
         <div
         className={`absolute mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-150 ${
-            align === 'right' ? 'right-0 origin-top-right' : 'left-0 origin-top-left'
+            align === 'right' ? '-right-11' : 'left-0'
         }`}
         >
         <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
