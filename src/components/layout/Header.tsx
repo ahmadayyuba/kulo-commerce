@@ -42,7 +42,17 @@ export const Header = ({
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event?.target as Node)){
-                setIsUserDropdownOpen(false);
+                setIsUserDropdownOpen(false);                        {isLoggedIn ? (
+                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                                <span className="font-semibold text-slate-800">{userName}</span>
+                                <span className="text-xs text-blue-600 font-bold bg-blue-50 px-2.5 py-1 rounded-full">Aktif</span>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-3 pt-2">
+                                <Button variant="secondary" fullWidth onClick={onLoginClick} className="py-3 text-base font-semibold">Login</Button>
+                                <Button variant="primary" fullWidth onClick={onRegisterClick} className="py-3 text-base font-semibold">Register</Button>
+                            </div>
+                        )}
             }
         };
 
@@ -174,7 +184,13 @@ export const Header = ({
                             : 'opacity-0 -translate-y-2 pointer-events-none'}`}
                 >
                     <div className="flex-1">
-                        <SearchBar placeholder="Search" onSearch={onSearch} />
+                        <SearchBar 
+                        placeholder="Search" 
+                        onSearch={(val) => {
+                            onSearch?.(val);
+                            setIsMobileSearchOpen(false);
+                        }} 
+                        />
                     </div>
                     <button
                         type="button"

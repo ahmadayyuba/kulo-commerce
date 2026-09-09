@@ -102,7 +102,7 @@ export const ProductDetailPage = ({
         </div>
 
         {/* INFORMASI PRODUK (KANAN / BAWAH MOBILE) */}
-        <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+        <div className="lg:col-span-7 space-y-5 sm:space-y-2">
           {/* Kategori & Judul */}
           <div className="space-y-1 sm:space-y-2">
             <span className="text-xs font-semibold text-slate-400 capitalize">
