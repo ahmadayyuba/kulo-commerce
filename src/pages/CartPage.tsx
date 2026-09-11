@@ -9,6 +9,7 @@ interface CartPageProps {
     onUpdateQuantity: (productId: number, amount: number) => void;
     onRemoveItem: (productId: number) => void;
     onContinueShopping: () => void;
+    onCheckout: () => void;
 }
 
 export const CartPage = ({
@@ -16,6 +17,7 @@ export const CartPage = ({
     onUpdateQuantity,
     onRemoveItem,
     onContinueShopping,
+    onCheckout,
 }: CartPageProps) => {
 
     const [selectedIds, setSelectedIds] = useState<Set<number>>(
@@ -189,7 +191,11 @@ export const CartPage = ({
                             </span>
                         </div>
 
-                        <Button variant="primary" fullWidth className="py-3 text-base font-semibold rounded-full">
+                        <Button 
+                        variant="primary" 
+                        fullWidth
+                        onClick={onCheckout}
+                        className="py-3 text-base font-semibold rounded-full">
                             Checkout
                         </Button>
                     </div>

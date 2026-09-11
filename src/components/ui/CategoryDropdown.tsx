@@ -2,11 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { GridIcon } from '../../assets/icons/icon';
 
 interface CategoryDropdownProps {
-    selectedCategory?: string | null;
-    onSelectCategory: (category: string) => void;
-    align?: 'left' | 'right';
+  onSelectCategory?: (category: string | null) => void; // Tambahkan '?' dan '| null'
+  selectedCategory?: string | null;
+  align?: 'left' | 'right';
 }
-
 const CATEGORIES = [
     "men's clothing",
     "jewelery",
@@ -39,7 +38,7 @@ export const CategoryDropdown = ({
     }, []);
 
     const handleSelect = (category: string) => {
-        onSelectCategory(category);
+        onSelectCategory?.(category);
         setIsOpen(false);
         };
 

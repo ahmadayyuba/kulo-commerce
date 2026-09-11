@@ -4,7 +4,8 @@ export interface Product {
     price: number;
     image: string;
     category: string;
-    description?: string; // ✅ Tambahkan ini
+    description?: string;
+    title : string;
     rating?: {
     rate: number;
     count: number;

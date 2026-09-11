@@ -12,6 +12,7 @@ import { supabase } from './lib/supabase';
 import { CartItem } from './types/cart';
 import { Product } from './types/product';
 import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -24,6 +25,8 @@ export default function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartPageOpen, setIsCartPageOpen] = useState(false);
   const [isAllCategoriesOpen, setIsAllCategoriesOpen] = useState(false);
+  const [isCheckoutPageOpen, setIsCheckoutPageOpen] = useState(false);
+  const [checkoutItems, setCheckoutItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -102,9 +105,24 @@ export default function App() {
   const resetToHome = () => {
     setIsCartPageOpen(false);
     setIsAllCategoriesOpen(false);
+    setIsCheckoutPageOpen(false);
     setSelectedProductId(null);
     setSelectedCategory(null);
     setSearchQuery('');
+  };
+
+  const handleProceedToCheckout = () => {
+    setCheckoutItems(cartItems); 
+    setIsCartPageOpen(false);    
+    setIsCheckoutPageOpen(true); 
+  };
+
+  const handleBuyNow = (product: Product, quantity: number = 1) => {
+    handleAddToCart(product, quantity);
+
+    setCheckoutItems([{ product, quantity }]); 
+    setSelectedProductId(null);  
+    setIsCheckoutPageOpen(true); 
   };
 
   return (
@@ -138,13 +156,17 @@ export default function App() {
         />
 
         {/* PENGONDISIAN HALAMAN */}
+        
+          
         {isCartPageOpen ? (
           <CartPage
             cartItems={cartItems}
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveItem}
             onContinueShopping={() => setIsCartPageOpen(false)}
+            onCheckout={handleProceedToCheckout}
           />
+
         ) : isAllCategoriesOpen ? (
           <AllCategoriesPage
             onSelectCategory={(cat: string) => {
@@ -153,6 +175,7 @@ export default function App() {
             }}
             onGoHome={resetToHome}
           />
+
         ) : selectedProductId ? (
           <ProductDetailPage
             productId={selectedProductId}
@@ -164,6 +187,7 @@ export default function App() {
             }}
             onSelectProduct={(id) => setSelectedProductId(id)}
           />
+          
         ) : searchQuery ? (
           <SearchPage
             searchQuery={searchQuery}

@@ -140,10 +140,13 @@ export const Header = ({
                         ${isMobileSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 >
                     <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 shrink-0">
-                    <CategoryDropdown 
-                        onSelectCategory={onSelectCategory}
-                        selectedCategory={selectedCategory}
-                        align="right"
+                    <CategoryDropdown
+                    onSelectCategory={(cat) => {
+                    if (onSelectCategory && cat) {
+                    onSelectCategory(cat);}
+                    }}
+                    selectedCategory={selectedCategory}
+                    align="right"
                     />
                     <button
                         type="button"
@@ -224,9 +227,9 @@ export const Header = ({
 
                         {/* 2. Menu Items Saat Logged In / Logged Out */}
                         {isLoggedIn ?(
-                            <div className="flex flex-row gap-3 items-center justify-between">
-                                <div className="p-2 bg-white rounded-2xl border border-slate-200 flex w-52">
-                                    <div className="flex items-center gap-2">
+                            <div className="flex flex-col gap-3 items-center justify-between">
+                                <div className="p-2 bg-white rounded-2xl border border-slate-200 flex w-full justify-center">
+                                    <div className="flex items-center gap-2 justify-center">
                                         <svg
                                             className="w-5 h-5 text-slate-700 shrink-0"
                                             fill="none"
@@ -252,7 +255,7 @@ export const Header = ({
                                         setIsMobileMenuOpen(false);
                                         onLogoutClick?.();
                                     }}
-                                    className="w-52 rounded-2xl border border-slate-200 bg-white text-slate-800 font-medium text-sm hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all flex items-center gap-3 p-2"
+                                    className="w-full rounded-2xl border border-slate-200 bg-white text-slate-800 font-medium text-sm hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all flex items-center gap-3 p-2 justify-center"
                                 >
                                     <svg
                                         className="w-5 h-5 shrink-0"
