@@ -155,10 +155,13 @@ export default function App() {
           onRegisterClick={() => setIsRegisterModalOpen(true)}
         />
 
-        {/* PENGONDISIAN HALAMAN */}
-        
-          
-        {isCartPageOpen ? (
+{/* PENGONDISIAN HALAMAN */}
+        {isCheckoutPageOpen ? (
+          <CheckoutPage
+            checkoutItems={checkoutItems}
+            onSelectPayment={() => {}}
+          />
+        ) : isCartPageOpen ? (
           <CartPage
             cartItems={cartItems}
             onUpdateQuantity={handleUpdateQuantity}
@@ -166,7 +169,6 @@ export default function App() {
             onContinueShopping={() => setIsCartPageOpen(false)}
             onCheckout={handleProceedToCheckout}
           />
-
         ) : isAllCategoriesOpen ? (
           <AllCategoriesPage
             onSelectCategory={(cat: string) => {
@@ -175,7 +177,6 @@ export default function App() {
             }}
             onGoHome={resetToHome}
           />
-
         ) : selectedProductId ? (
           <ProductDetailPage
             productId={selectedProductId}
@@ -187,7 +188,6 @@ export default function App() {
             }}
             onSelectProduct={(id) => setSelectedProductId(id)}
           />
-          
         ) : searchQuery ? (
           <SearchPage
             searchQuery={searchQuery}
