@@ -28,7 +28,7 @@ export const Logo = ({ showText = true, className = "", ...props }: LogoProps) =
             <CommerceIcon />
             {showText && (
                 <span className="hidden md:inline-block text-xl font-bold tracking-tight text-slate-900 mt-2">
-                    CommerceHub
+                    KuloCommerce
                 </span>
             )}
         </div>
