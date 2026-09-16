@@ -160,6 +160,7 @@ export default function App() {
           <CheckoutPage
             checkoutItems={checkoutItems}
             onSelectPayment={() => {}}
+            onBackToHome={resetToHome}
           />
         ) : isCartPageOpen ? (
           <CartPage

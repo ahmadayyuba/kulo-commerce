@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { CartItem } from "../types/cart";
-import { PaymentModal } from "../pages/PaymentModal.tsx"; // Sesuaikan path import foldermu
-
+import { PaymentModal } from "../pages/PaymentModal.tsx"; // 
+import { SuccesPaymentModal } from '../components/ui/SuccessPaymentModal.tsx';
 interface CheckoutPageProps {
     checkoutItems: CartItem[];
     onSelectPayment: () => void;
+    onBackToHome: () => void;
 }
 
 export const CheckoutPage = ({
     checkoutItems,
+    onBackToHome,
 }: CheckoutPageProps) => {
-    // 1. Tambahkan state untuk mengontrol modal dan bank yang dipilih
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSuccesModalOpen, setIsSuccesModalOpen]= useState(false);
     const [selectedBank, setSelectedBank] = useState<string | null>(null);
 
     const totalItems = checkoutItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -97,7 +99,7 @@ export const CheckoutPage = ({
                 </div>
             </div>
 
-            {/* 2. TEMPELKAN PAYMENT MODAL DI SINI (SEBELUM </main>) */}
+            {/* PAYMENT MODAL */}
             <PaymentModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
@@ -105,8 +107,18 @@ export const CheckoutPage = ({
                 selectedBank={selectedBank}
                 onSelectBank={(bankId) => setSelectedBank(bankId)}
                 onPay={() => {
-                    alert(`Pembayaran menggunakan ${selectedBank} berhasil diproses!`);
                     setIsModalOpen(false);
+                    setIsSuccesModalOpen(true);
+                }}
+            />
+
+            {/* SUCCESS PAYMENT MODAL */}
+            <SuccesPaymentModal
+                isOpen={isSuccesModalOpen}
+                onClose={() => setIsSuccesModalOpen(false)}
+                onBackToHome={() =>{
+                    setIsSuccesModalOpen(false);
+                    onBackToHome();
                 }}
             />
         </main>
