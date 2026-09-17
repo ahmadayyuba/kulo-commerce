@@ -19,7 +19,7 @@ export const CartButton = ({
             className={`relative inline-flex items-center justify-center p-2 rounded-full text-slate-800 hover:bg-slate-100 transition-colors focus:outline-none border border-slate-200  ${className}`}
             aria-label="Keranjang Belanja"
         >
-        <ShoppingCartIcon className="w-6 h-6"/>
+        <ShoppingCartIcon className="w-5 h-5"/>
 
         <div className="absolute -top-0.5 -right-0.5">
             <Badge count={count}/>
